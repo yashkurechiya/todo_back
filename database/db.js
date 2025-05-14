@@ -7,8 +7,8 @@ export const db = () => {
     })
 
 
-    .then(() =>
-        console.log("db connected"))
+    .then((c) =>
+        console.log(`db connected  to ${c.connection.host}`))
     .catch((e) => console.log(e))
 }
 
