@@ -32,26 +32,30 @@ export const getMyTask = async (req, res, next) => {
 
 }
 export const updatetask = async (req, res, next) => {
+  const { id } = req.params;
 
-    const { id } = req.params;
+  const task = await Task.findById(id);
 
-    console.log("working");
-    const task = await Task.findById(id);
+  if (!task) return next(new ErrorHandler("Invalid Task ID", 404));
 
-    if(!task) return next(new ErrorHandler("invali", 404))
-    console.log("working");
-    
+  // Optional update fields
+  if (req.body.title) task.title = req.body.title;
+  if (req.body.description) task.description = req.body.description;
 
-    task.isCompleted = !task.isCompleted;
+  // Optional toggle
+  if (typeof req.body.isCompleted === "boolean") {
+    task.isCompleted = req.body.isCompleted;
+  }
 
-    await task.save();
+  await task.save();
 
-    res.status(200).json({
-        success: true,
-        message: "task updated",
-    })
+  res.status(200).json({
+    success: true,
+    message: "Task updated",
+    task,
+  });
+};
 
-}
 
 export const deletetask = async (req, res, next) => {
 
