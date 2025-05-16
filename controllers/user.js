@@ -1,6 +1,5 @@
 import { User } from "../models/user.js";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 import { sendCookie } from "../utils/features.js";
 
 
@@ -55,7 +54,7 @@ export const register = async (req, res) => {
 export const getMyProfile = (req, res) => {
 
     res.status(200).json({
-        sucecss: true,
+        success: true,
         user: req.user,
     });
 };
@@ -67,9 +66,9 @@ export const logout = (req, res) => {
     res.status(200).cookie("token", "", {
         expires: new Date(Date.now()),
         sameSite: process.env.NODE_ENV === "Development" ? "lax" : "none",
-        secure: process.env.NODE_ENV === "Development" ? false : true,
-
-    }).json({
+        secure: process.env.NODE_ENV !== "Development"
+    })
+    .json({
         sucecss: true,
         user: req.user,
     });
